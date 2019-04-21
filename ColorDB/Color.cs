@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ColorDB
+﻿namespace ColorDB
 {
     public class Color
     {
