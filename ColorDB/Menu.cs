@@ -12,13 +12,13 @@ namespace ColorDB
             if (c < 0)
             {
                 Console.WriteLine("[1] Wyswietl aktualna palete kolorow\n[2] Dodaj nowy kolor recznie\n[3] Dodaj kolory z pliku\n[4] Zapisz palete kolorow do pliku\n" +
-                    "[5] Wyszukaj kolor z palety\n[6] Usun kolor\n\n" +
+                    "[5] Wyszukaj kolor z palety\n[6] Usun kolor\n[7] Zmodyfikuj kolor\n\n" +
                 "[0] Wyjdz z programu\n");
 
                 try
                 {
                     c = Convert.ToInt32(Console.ReadLine());
-                    if (c < 0 || c > 6) throw new ArgumentOutOfRangeException();
+                    if (c < 0 || c > 7) throw new ArgumentOutOfRangeException();
                 }
                 catch (FormatException)
                 {
@@ -27,7 +27,7 @@ namespace ColorDB
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    Console.WriteLine("Wybierz liczbe z zakresu 0-6! Wcisnij enter, by wpisac ponownie.");
+                    Console.WriteLine("Wybierz liczbe z zakresu 0-7! Wcisnij enter, by wpisac ponownie.");
                     Console.ReadLine(); ShowMenu(-1);
                 }
                 catch (OverflowException)
@@ -52,6 +52,9 @@ namespace ColorDB
                 Console.WriteLine("\nZapisywanie do pliku powiodlo sie! Wcisnij enter, aby wrocic do menu.");
                 Console.ReadLine(); ShowMenu(-1);
             }
+            if (c == 5) FindColor();
+            if (c == 6) Console.WriteLine("empty so far");
+            if (c == 7) Console.WriteLine();
         }
 
         public static void AddFromConsole()
@@ -104,7 +107,7 @@ namespace ColorDB
             while(s != "y" && s != "n")
             {
                 if (j > 0) Console.WriteLine("Dostepne sa jedynie opcje y oraz n\n");
-                s = Console.ReadLine();
+                s = Console.ReadLine().ToLower();
                 j++;
             }
             if (s == "y") ExternalFiles.ReadFromFile();
@@ -114,6 +117,26 @@ namespace ColorDB
                 string fileName = Console.ReadLine();
                 ExternalFiles.ReadFromFile(fileName);
             }
+        }
+
+        public static void FindColor()
+        {
+            Console.Clear();
+            Console.WriteLine("Podaj nazwe koloru, ktory chcesz wyszukac: ");
+            try
+            {
+                string toFind = Console.ReadLine();
+                Color color = Palette.c.Find(e => e.Name == toFind);
+                Console.Clear();
+                Console.WriteLine("Odnaleziono: {0} ( RGB: {1} {2} {3} )\n\nNacisjnij enter, aby powrocic do menu.", color.Name, color.Red, color.Green, color.Blue);
+                Console.ReadLine(); ShowMenu(-1);
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Taki kolor nie wystepuje w palecie. Nacisnij enter, aby wrocic do menu.");
+                Console.ReadLine(); ShowMenu(-1);
+            }
+            
         }
     }
 }
