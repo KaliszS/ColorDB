@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ColorDB
 {
@@ -78,7 +79,7 @@ namespace ColorDB
             Console.Clear();
 
             Console.WriteLine("{0,-20}{1,14}{2,21}\n", "Nazwa koloru", "Kod decymalny", "Kod heksadecymalny");
-            foreach (Color color in Palette.c)
+            foreach (Color color in Palette.c.OrderBy(x => x.Name).ThenBy(x => x.Red).ToList())
             {
                 Console.WriteLine("{0,-20} {1:D3} {2:D3} {3:D3} {1,6:X2} {2:X2} {3:X2}",
                     color.Name, color.Red, color.Green, color.Blue);
