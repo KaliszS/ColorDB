@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ColorDB
 {
@@ -53,7 +54,7 @@ namespace ColorDB
                 Console.ReadLine(); ShowMenu(-1);
             }
             if (c == 5) FindColor();
-            if (c == 6) Console.WriteLine("empty so far");
+            if (c == 6) FindColor(1);
             if (c == 7) Console.WriteLine();
         }
 
@@ -119,19 +120,28 @@ namespace ColorDB
             }
         }
 
-        public static void FindColor()
+        public static void FindColor(int gate=0)
         {
             Console.Clear();
-            Console.WriteLine("Podaj nazwe koloru, ktory chcesz wyszukac: ");
+            if (gate == 0) Console.WriteLine("Podaj nazwe koloru, ktory chcesz wyszukac: ");
+            if (gate == 1) Console.WriteLine("Podaj nazwe koloru, ktory chcesz usunac: ");
             try
             {
                 string toFind = Console.ReadLine();
                 Color color = Palette.c.Find(e => e.Name == toFind);
                 Console.Clear();
-                Console.WriteLine("Odnaleziono: {0} ( RGB: {1} {2} {3} )\n\nNacisjnij enter, aby powrocic do menu.", color.Name, color.Red, color.Green, color.Blue);
-                Console.ReadLine(); ShowMenu(-1);
+                if (gate == 0) Console.WriteLine("Odnaleziono: {0} ( RGB: {1} {2} {3} )\n\nNacisnij enter, aby powrocic do menu.", color.Name, color.Red, color.Green, color.Blue);
+                if (gate == 1)
+                {
+                    int index = Palette.c.IndexOf(color);
+                    Palette.c.RemoveAt(index);
+                }
+                if (gate == 1) Console.WriteLine("Wcisnij enter, aby zobaczyc zmodyfikowana palete kolorow.");
+                Console.ReadLine();
+                if (gate == 1) Palette.ShowPalette();
+                if (gate == 0) ShowMenu(-1);
             }
-            catch (NullReferenceException)
+            catch(Exception ex) when (ex is NullReferenceException || ex is ArgumentOutOfRangeException)
             {
                 Console.WriteLine("Taki kolor nie wystepuje w palecie. Nacisnij enter, aby wrocic do menu.");
                 Console.ReadLine(); ShowMenu(-1);
