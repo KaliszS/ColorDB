@@ -40,14 +40,29 @@ namespace ColorDB
                 Console.ReadLine(); Menu.ShowMenu(-1);
             }
             catch (ArgumentOutOfRangeException)
-            {    // dodac ile kolor dodalo, a ile nie (palette2.txt)
-                Console.WriteLine("Bajt miesci tylko liczby z zakresu 0-255!\nWcisnij enter, aby wrocic do menu, a nastepnie popraw blad w pliku.");
+            {
+                Console.WriteLine("Dodano tyle kolorow, ile sie dalo, ale gdzies wystapil ponizszy blad:\n" +
+                    "Bajt miesci tylko liczby z zakresu 0-255!\n" +
+                    "Wcisnij enter, aby wrocic do menu, a nastepnie popraw blad w pliku.");
                 Console.ReadLine(); Menu.ShowMenu(-1);
             }
 
             Console.Clear();
             Console.WriteLine("Dane z pliku {0}.txt wczytano poprawnie.\nWcisnij enter, aby zobaczyc zmiany w palecie.", fileName);
             Console.ReadLine();  Palette.ShowPalette();
+        }
+
+        public static void SaveIntoFile(string fileName)
+        {
+            using (StreamWriter saveInto = new StreamWriter(fileName + ".txt", true))
+            {
+                Console.WriteLine("\r\n");
+                foreach (Color color in Palette.c)
+                {
+                    saveInto.WriteLine("{0}\r\n{1} {2} {3}",
+                    color.Name, color.Red, color.Green, color.Blue);
+                }
+            }
         }
     }
 }

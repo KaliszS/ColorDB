@@ -12,13 +12,13 @@ namespace ColorDB
             if (c < 0)
             {
                 Console.WriteLine("[1] Wyswietl aktualna palete kolorow\n[2] Dodaj nowy kolor recznie\n[3] Dodaj kolory z pliku\n[4] Zapisz palete kolorow do pliku\n" +
-                    "[5] Wyszukaj kolor z palety\n\n" +
+                    "[5] Wyszukaj kolor z palety\n[6] Usun kolor\n\n" +
                 "[0] Wyjdz z programu\n");
 
                 try
                 {
                     c = Convert.ToInt32(Console.ReadLine());
-                    if (c < 0 || c > 5) throw new ArgumentOutOfRangeException();
+                    if (c < 0 || c > 6) throw new ArgumentOutOfRangeException();
                 }
                 catch (FormatException)
                 {
@@ -27,7 +27,7 @@ namespace ColorDB
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    Console.WriteLine("Wybierz liczbe z zakresu 0-5! Wcisnij enter, by wpisac ponownie.");
+                    Console.WriteLine("Wybierz liczbe z zakresu 0-6! Wcisnij enter, by wpisac ponownie.");
                     Console.ReadLine(); ShowMenu(-1);
                 }
                 catch (OverflowException)
@@ -40,6 +40,18 @@ namespace ColorDB
             if (c == 1) Palette.ShowPalette();
             if (c == 2) AddFromConsole();
             if (c == 3) ReadFile();
+            if (c == 4)
+            {
+                Console.Clear();
+                Console.WriteLine("Podaj nazwe pliku (bez rozszerzenia .txt), do ktorego chcesz zapisac aktualna palete.\n\n" +
+                    "[*] Jesli plik o podanej nazwie nie istnieje, to zostanie utworzony.\n" +
+                    "[*] Jesli istnieje i sa tam juz wpisane kolory, to nowe zostana dopisane, bez nadpisywania starych.\n\n");
+                string fileName = Console.ReadLine();
+                ExternalFiles.SaveIntoFile(fileName);
+
+                Console.WriteLine("\nZapisywanie do pliku powiodlo sie! Wcisnij enter, aby wrocic do menu.");
+                Console.ReadLine(); ShowMenu(-1);
+            }
         }
 
         public static void AddFromConsole()
