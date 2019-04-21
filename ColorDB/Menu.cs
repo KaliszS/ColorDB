@@ -55,7 +55,7 @@ namespace ColorDB
             }
             if (c == 5) FindColor();
             if (c == 6) FindColor(1);
-            if (c == 7) Console.WriteLine();
+            if (c == 7) FindColor(2);
         }
 
         public static void AddFromConsole()
@@ -67,13 +67,13 @@ namespace ColorDB
             {
                 Console.WriteLine("Podaj nazwe koloru: ");
                 n = Console.ReadLine();
-                Console.WriteLine("Podaj nasycenie czerwieni: ");
+                Console.WriteLine("Podaj nasycenie czerwieni (0-255): ");
                 r = Convert.ToInt32(Console.ReadLine());
                 if(r < 0 || r > 255) throw new ArgumentOutOfRangeException();
-                Console.WriteLine("Podaj nasycenie zieleni: ");
+                Console.WriteLine("Podaj nasycenie zieleni (0-255): ");
                 g = Convert.ToInt32(Console.ReadLine());
                 if (g < 0 || g > 255) throw new ArgumentOutOfRangeException();
-                Console.WriteLine("Podaj nasycenie niebieskiego: ");
+                Console.WriteLine("Podaj nasycenie niebieskiego (0-255): ");
                 b = Convert.ToInt32(Console.ReadLine());
                 if (b < 0 || b > 255) throw new ArgumentOutOfRangeException();
 
@@ -81,17 +81,17 @@ namespace ColorDB
             }
             catch (FormatException)
             {
-                Console.WriteLine("To nie jest liczba calkowita! Dodawanie koloru zakonczone niepowodzeniem.");
+                Console.WriteLine("To nie jest liczba calkowita! Dodawanie koloru zakonczone niepowodzeniem. Wcisnij enter, aby wrocic do menu");
                 Console.ReadLine(); ShowMenu(-1);
             }
             catch (ArgumentOutOfRangeException)
             {
-                Console.WriteLine("Bajt miesci tylko liczby z zakresu 0-255! Dodawanie koloru zakonczone niepowodzeniem.");
+                Console.WriteLine("Bajt miesci tylko liczby z zakresu 0-255! Dodawanie koloru zakonczone niepowodzeniem. Wcisnij enter, aby wrocic do menu");
                 Console.ReadLine(); ShowMenu(-1);
             }
             catch (OverflowException)
             {
-                Console.WriteLine("Wybrana liczba jest zbyt duza! Dodawanie koloru zakonczone niepowodzeniem.");
+                Console.WriteLine("Wybrana liczba jest zbyt duza! Dodawanie koloru zakonczone niepowodzeniem. Wcisnij enter, aby wrocic do menu");
                 Console.ReadLine(); ShowMenu(-1);
             }
 
@@ -125,21 +125,23 @@ namespace ColorDB
             Console.Clear();
             if (gate == 0) Console.WriteLine("Podaj nazwe koloru, ktory chcesz wyszukac: ");
             if (gate == 1) Console.WriteLine("Podaj nazwe koloru, ktory chcesz usunac: ");
+            if (gate == 2) Console.WriteLine("Podaj nazwe koloru, ktory chcesz zmodyfikowac: ");
             try
             {
                 string toFind = Console.ReadLine();
                 Color color = Palette.c.Find(e => e.Name == toFind);
                 Console.Clear();
                 if (gate == 0) Console.WriteLine("Odnaleziono: {0} ( RGB: {1} {2} {3} )\n\nNacisnij enter, aby powrocic do menu.", color.Name, color.Red, color.Green, color.Blue);
-                if (gate == 1)
+                if (gate == 1 || gate == 2)
                 {
                     int index = Palette.c.IndexOf(color);
-                    Palette.c.RemoveAt(index);
+                    if (gate == 1) Palette.c.RemoveAt(index);
+                    if (gate == 2) Palette.ModifyColor(index);
                 }
                 if (gate == 1) Console.WriteLine("Wcisnij enter, aby zobaczyc zmodyfikowana palete kolorow.");
                 Console.ReadLine();
-                if (gate == 1) Palette.ShowPalette();
                 if (gate == 0) ShowMenu(-1);
+                if (gate == 1) Palette.ShowPalette();
             }
             catch(Exception ex) when (ex is NullReferenceException || ex is ArgumentOutOfRangeException)
             {
